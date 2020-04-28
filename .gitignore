@@ -1,0 +1,14 @@
+# Maven
+target/
+test/
+
+# vscode
+.vscode/
+.settings/
+.classpath
+.project
+
+# sqlite
+*.sqlite3
+*.sqlite
+*.db
