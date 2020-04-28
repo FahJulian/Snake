@@ -1,10 +1,10 @@
 package com.github.fahjulian.snake;
 
-import java.awt.EventQueue;
+import com.github.fahjulian.snake.game.Game;
 
 public class Main 
 {
   public static void main(String[] args) {
-    EventQueue.invokeLater(new Game());
+    new Thread(new Game()).start();
   }
 }
