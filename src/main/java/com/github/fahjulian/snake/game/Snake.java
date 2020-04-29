@@ -2,6 +2,7 @@ package com.github.fahjulian.snake.game;
 
 import com.github.fahjulian.snake.enums.Direction;
 import com.github.fahjulian.snake.util.Clock;
+import com.github.fahjulian.snake.util.CollisionManager;
 
 import java.util.LinkedList;
 
@@ -15,24 +16,44 @@ public class Snake {
   private LinkedList<Rectangle> tail;
   private Direction movingDirection;
   private Clock movingClock;
+  private Grid grid;
   
-  public Snake(int x, int y, int size)
+  public Snake(Grid grid, int x, int y, int size)
   {
+    this.grid = grid;
     this.size = size;
-    head = new Rectangle(x, y, size, size);
-    tail = new LinkedList<Rectangle>();
-    tail.add(new Rectangle(x, y + size, size, size));
-    tail.add(new Rectangle(x + size, y + size, size, size));
-    movingDirection = Direction.UP;
-    movingClock = new Clock();
+    this.head = new Rectangle(x, y, size, size);
+    this.tail = new LinkedList<Rectangle>();
+    this.movingDirection = Direction.UP;
+    this.movingClock = new Clock();
+  }
+
+  private Snake(Snake snake)
+  {
+    this.grid = snake.grid;
+    this.size = snake.size;
+    this.head = (Rectangle) snake.head.clone();
+    this.tail = new LinkedList<Rectangle>();
+    for (Rectangle tailElement: snake.tail)
+      this.tail.add((Rectangle) tailElement.clone());
+    this.movingClock = new Clock();
+    this.movingDirection = snake.movingDirection;
   }
 
   public void update()
   { 
-    if (movingClock.peekElapsed() > 1000)
+    if (movingClock.peekElapsed() > 200)
     {
-      move();
-      movingClock.reset();
+      if (wouldCollideOnMove())
+      {
+        grid.game.gameover();
+        return;
+      }
+      else
+      {
+        move();
+        movingClock.reset();
+      }
     }
   }
 
@@ -73,5 +94,18 @@ public class Snake {
         head.translate(size, 0);
         break;
     }
+  }
+
+  private boolean wouldCollideOnMove()
+  {
+    Snake testSnake = new Snake(this);
+    testSnake.move();
+    for (Rectangle tailElement: testSnake.tail)
+      if (CollisionManager.hasHitStaticObject(testSnake.head, tailElement))
+        return true;
+    if (CollisionManager.isOutsideBounds(testSnake.head, grid.getBounds()))
+      return true;
+
+    return false;
   }
 }

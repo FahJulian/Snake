@@ -39,6 +39,11 @@ public class Game implements Runnable {
     gameClock = new Clock();
   }
 
+  public void gameover()
+  {
+    state = GameState.GAMEOVER;
+  }
+
   private void update() {
     grid.update();
   }
@@ -52,7 +57,7 @@ public class Game implements Runnable {
     window = new Window(WINDOW_TITLE, WIDTH, HEIGHT);
     window.setVisible(true);
 
-    grid = new Grid(0, 0, GRID_ROWS, GRID_COLS, CELL_SIZE);
+    grid = new Grid(this, 0, 0, GRID_ROWS, GRID_COLS, CELL_SIZE);
     window.add(grid, 1, 0, grid.getSize().width, grid.getSize().height);
 
     window.addKeyListener(new KeyHandler(this));

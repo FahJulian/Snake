@@ -14,16 +14,18 @@ public class Grid extends JPanel
   private final int cols;
   private final int cellSize;
   private final Point pos;
+  final Game game;
   final Snake snake;
 
-  public Grid(int x, int y, int rows, int cols, int cellSize)
+  public Grid(Game game, int x, int y, int rows, int cols, int cellSize)
   {
     super.setSize(cols * cellSize + 2, rows * cellSize + 2);
+    this.game = game;
     this.rows = rows;
     this.cols = cols;
     this.cellSize = cellSize;
     this.pos = new Point(x, y);
-    this.snake = new Snake(x + rows / 2 * cellSize + 1, y + cols / 2 * cellSize + 1, cellSize);
+    this.snake = new Snake(this, x + rows / 2 * cellSize + 1, y + cols / 2 * cellSize + 1, cellSize);
   }
 
   public void update()
