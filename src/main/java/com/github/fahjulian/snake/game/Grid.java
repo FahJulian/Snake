@@ -14,7 +14,7 @@ public class Grid extends JPanel
   private final int cols;
   private final int cellSize;
   private final Point pos;
-  private final Snake snake;
+  final Snake snake;
 
   public Grid(int x, int y, int rows, int cols, int cellSize)
   {
@@ -28,7 +28,7 @@ public class Grid extends JPanel
 
   public void update()
   {
-
+    snake.update();
   }
 
   public void render()
