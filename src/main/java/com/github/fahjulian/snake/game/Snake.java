@@ -24,6 +24,7 @@ public class Snake {
     this.size = size;
     this.head = new Rectangle(x, y, size, size);
     this.tail = new LinkedList<Rectangle>();
+    this.tail.add(new Rectangle(x, y + size, size, size));
     this.movingDirection = Direction.UP;
     this.movingClock = new Clock();
   }
@@ -42,7 +43,7 @@ public class Snake {
 
   public void update()
   { 
-    if (movingClock.peekElapsed() > 200)
+    if (movingClock.peekDuration() > 500)
     {
       if (wouldCollideOnMove())
       {
@@ -50,10 +51,16 @@ public class Snake {
         return;
       }
       else
-      {
-        move();
-        movingClock.reset();
+      { 
+        boolean growSnake = false;
+        if (CollisionManager.hasHitStaticObject(head, grid.treat))
+        {
+          growSnake = true;
+          grid.placeTreat();
+        }
+        move(growSnake);
       }
+      movingClock.reset();
     }
   }
 
@@ -74,10 +81,11 @@ public class Snake {
     this.movingDirection = dir;
   }
 
-  private void move()
+  private void move(boolean growSnake)
   {
     tail.add(0, (Rectangle) head.clone());
-    tail.remove(tail.size() - 1);
+    if (!growSnake)
+      tail.remove(tail.size() - 1);
     
     switch (movingDirection)
     {
@@ -99,7 +107,7 @@ public class Snake {
   private boolean wouldCollideOnMove()
   {
     Snake testSnake = new Snake(this);
-    testSnake.move();
+    testSnake.move(false);
     for (Rectangle tailElement: testSnake.tail)
       if (CollisionManager.hasHitStaticObject(testSnake.head, tailElement))
         return true;

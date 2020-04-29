@@ -30,13 +30,14 @@ public class Game implements Runnable {
     CELL_SIZE = 25;
     WIDTH = GRID_COLS * CELL_SIZE + 2;
     HEIGHT = GRID_ROWS * CELL_SIZE + 2;
-    FPS = 60;
+    FPS = 10;
   }
 
   public Game() {
     // state = GameState.NEWGAME;
     state = GameState.INGAME;
     gameClock = new Clock();
+    new Thread(this).start();
   }
 
   public void gameover()
@@ -70,10 +71,11 @@ public class Game implements Runnable {
       if (state == GameState.INGAME)
         update();
       render();
-
-      if (gameClock.peekElapsed() < 1000 / FPS) {
+      
+      int delta = gameClock.peekDuration();
+      if (delta < 1000 / FPS) {
         try {
-          Thread.sleep(1000 / FPS - gameClock.getElapsed());
+          Thread.sleep(1000 / FPS - delta);
         } catch (InterruptedException e) {
           e.printStackTrace();
           System.exit(-1);
@@ -94,11 +96,11 @@ class KeyHandler implements KeyListener
   }
 
   @Override
-  public void keyPressed(KeyEvent e) {
+  public void keyReleased(KeyEvent e) {
   }
   
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyPressed(KeyEvent e) {
     switch (e.getKeyCode())
     {
       case KeyEvent.VK_UP: game.grid.snake.setDirection(Direction.UP); break;

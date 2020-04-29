@@ -6,7 +6,7 @@
 
 	<groupId>com.github.fahjulian</groupId>
 	<artifactId>snake</artifactId>
-	<version>0.1.0</version>
+	<version>1.0.0</version>
 	<name>Snake</name>
 	<packaging>jar</packaging>
 
@@ -25,7 +25,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>Snake-0.1.0</finalName>
+		<finalName>Snake-1.0.0</finalName>
 
 		<plugins>
 			<plugin>

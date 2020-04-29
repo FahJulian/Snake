@@ -1,27 +1,39 @@
 package com.github.fahjulian.snake.util;
 
 public class Clock {
-  private long timer;
+  private long start;
 
-  public Clock()
+  public Clock() 
   {
-    timer = System.nanoTime();
+    start = System.nanoTime();
   }
 
-  public int peekElapsed()
+  /**
+   * Get duration since last time without reseting the timer.
+   * @return Duration since last request in millis
+   */
+  public int peekDuration()
   {
-    return (int) ((System.nanoTime() - timer) / 1.0e6);
+    return (int)((System.nanoTime() - start) / 1e6);
   }
 
-  public int getElapsed()
+  /**
+   * Get duration since last time and reset the timer.
+   * @return Duration since last request in millis
+   */
+  public int getDuration()
   {
-    int elapsed = peekElapsed();
-    reset();
-    return elapsed;
+    long now = System.nanoTime();
+    int duration = (int)((now - start) / 1e6);
+    start = now;
+    return duration;
   }
 
+  /**
+   * Reset the timer.
+   */
   public void reset()
   {
-    timer = System.nanoTime();
+    start = System.nanoTime();
   }
 }
